@@ -1,5 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const dropdownButton = document.getElementById("dropdownButton");
+  console.log("Calendar script loaded"); // Debug log
+  const dropdownButtons = document.querySelectorAll(
+    "[data-calendar='trigger']"
+  );
+  console.log("Found dropdown buttons:", dropdownButtons.length); // Debug log
   const calendarOverlay = document.getElementById("calendarOverlay");
   const monthYear = document.getElementById("monthYear");
   const datesContainer = document.getElementById("dates");
@@ -7,6 +11,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const nextMonth = document.getElementById("nextMonth");
 
   let currentDate = new Date();
+  let activeDropdown = null;
+
+  function showCalendar(dropdownButton) {
+    calendarOverlay.classList.remove("hidden");
+    activeDropdown = dropdownButton;
+    renderCalendar(currentDate);
+  }
+
+  function hideCalendar() {
+    calendarOverlay.classList.add("hidden");
+    activeDropdown = null;
+  }
 
   function renderCalendar(date) {
     datesContainer.innerHTML = "";
@@ -73,8 +89,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Event klik hanya untuk tanggal dalam 7 hari terakhir
         dateElem.addEventListener("click", () => {
-          alert("Tanggal dipilih: " + thisDate.toLocaleDateString("id-ID"));
-          calendarOverlay.classList.add("hidden");
+          if (activeDropdown) {
+            activeDropdown.textContent = thisDate.toLocaleDateString("id-ID");
+          }
+          hideCalendar();
         });
       }
       // Jika tanggal sudah lampau lebih dari 7 hari lalu
@@ -100,27 +118,43 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Tombol dropdown
-  dropdownButton.addEventListener("click", () => {
-    calendarOverlay.classList.toggle("hidden");
-    renderCalendar(currentDate);
-  });
-
-  // Navigasi bulan
-  prevMonth.addEventListener("click", () => {
+  // Event Handlers for calendar controls
+  prevMonth.addEventListener("click", (e) => {
+    e.stopPropagation();
     currentDate.setMonth(currentDate.getMonth() - 1);
     renderCalendar(currentDate);
   });
 
-  nextMonth.addEventListener("click", () => {
+  nextMonth.addEventListener("click", (e) => {
+    e.stopPropagation();
     currentDate.setMonth(currentDate.getMonth() + 1);
     renderCalendar(currentDate);
   });
 
-  // Klik di luar area menutup overlay
+  // Set up calendar triggers
+  dropdownButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      showCalendar(button);
+    });
+  });
+
+  // Close calendar when clicking outside
   calendarOverlay.addEventListener("click", (e) => {
-    if (e.target === calendarOverlay) {
-      calendarOverlay.classList.add("hidden");
+    if (e.target.classList.contains("calendar-backdrop")) {
+      hideCalendar();
     }
+  });
+
+  // Close calendar with Escape key
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !calendarOverlay.classList.contains("hidden")) {
+      hideCalendar();
+    }
+  });
+
+  // Initial setup - set current date for all calendar triggers
+  const now = new Date();
+  dropdownButtons.forEach((button) => {
+    button.textContent = now.toLocaleDateString("id-ID");
   });
 });

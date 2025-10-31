@@ -16,6 +16,88 @@
         border: 2px solid red;
       }; 
     </style> -->
+    
+    <!-- Load JavaScript files -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script defer src="js/calendar.js"></script>
+    <script defer src="js/diagram.js"></script>
+    
+    <!-- Script untuk modal daftar tong -->
+    <script>
+      function openModal() {
+        const modal = document.getElementById('modalDaftarkan');
+        const modalContent = document.getElementById('modalContent');
+        
+        // Tampilkan modal
+        modal.classList.remove('hidden');
+        
+        // Animasi fade in
+        requestAnimationFrame(() => {
+          modal.style.opacity = '1';
+          modalContent.style.transform = 'scale(1)';
+          modalContent.style.opacity = '1';
+        });
+      }
+
+      function closeModal() {
+        const modal = document.getElementById('modalDaftarkan');
+        const modalContent = document.getElementById('modalContent');
+        
+        // Animasi fade out
+        modal.style.opacity = '0';
+        modalContent.style.transform = 'scale(0.95)';
+        modalContent.style.opacity = '0';
+        
+        // Sembunyikan modal setelah animasi
+        setTimeout(() => {
+          modal.classList.add('hidden');
+          modal.style.opacity = '';
+          modalContent.style.transform = '';
+          modalContent.style.opacity = '';
+        }, 300);
+      }
+
+      // Event listener saat dokumen dimuat
+      document.addEventListener('DOMContentLoaded', () => {
+        const modal = document.getElementById('modalDaftarkan');
+        const btnCloseModal = document.getElementById('btnCloseModal');
+        const btnBatalModal = document.getElementById('btnBatalModal');
+        const formDaftarTong = document.getElementById('formDaftarTong');
+
+        // Event untuk tombol close dan batal
+        if (btnCloseModal) btnCloseModal.addEventListener('click', closeModal);
+        if (btnBatalModal) btnBatalModal.addEventListener('click', closeModal);
+
+        // Tutup modal saat klik di luar
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) closeModal();
+        });
+
+        // Handle form submission
+        formDaftarTong.addEventListener('submit', (e) => {
+          e.preventDefault();
+          
+          const namaTong = document.getElementById('namaTong').value;
+          const kodeTong = document.getElementById('kodeTong').value;
+
+          console.log('Data yang akan dikirim:', { nama: namaTong, kode: kodeTong });
+          
+          // Reset form dan tutup modal
+          formDaftarTong.reset();
+          closeModal();
+
+          // Notifikasi sukses sederhana
+          alert('Tong sampah berhasil didaftarkan!');
+        });
+
+        // Tutup modal dengan tombol Escape
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+            closeModal();
+          }
+        });
+      });
+    </script>
   </head>
   <body class="min-h-screen">
     <nav>
@@ -91,13 +173,62 @@
 
         <!-- waktu -->
         <div
-          class="xl:w-56 xl:h-9 xl:-mt-1 absolute left-1/2 -translate-x-1/2 top-[165px] bg-white rounded-xl shadow-[inset_0_2px_6px_rgba(0,0,0,0.30)] p-1 w-40 text-center z-20"
+          class="xl:w-56 xl:h-9 xl:-mt-1 absolute left-1/2 -translate-x-1/2 top-[165px] bg-white rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.1)] hover:shadow-[0_6px_16px_rgba(0,0,0,0.15)] transition-shadow duration-300 p-1 w-40 text-center z-20 cursor-pointer group"
+          data-calendar="trigger"
         >
           <h2
-            class="font-digital xl:font-medium mt-1 tracking-tighter font-medium text-xs xl:text-sm text-gray-800"
+            class="font-digital xl:font-medium mt-1 tracking-tighter font-medium text-xs xl:text-sm text-gray-800 group-hover:text-emerald-600 transition-colors duration-200"
           >
             20-10-2025, 10:42
           </h2>
+          
+          <!-- Calendar Overlay -->
+          <div id="calendarOverlay" class="hidden fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm z-50 transition-all duration-300">
+            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+              <div class="bg-white rounded-2xl shadow-2xl p-4 min-w-[320px]">
+                <!-- Calendar Header -->
+                <div class="flex items-center justify-between mb-4">
+                  <button id="prevMonth" class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                    <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                  </button>
+                  <h3 id="monthYear" class="text-lg font-semibold text-gray-800"></h3>
+                  <button id="nextMonth" class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                    <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  </button>
+                </div>
+                
+                <!-- Week days header -->
+                <div class="grid grid-cols-7 mb-2">
+                  <div class="text-center text-sm font-medium text-gray-400">Sen</div>
+                  <div class="text-center text-sm font-medium text-gray-400">Sel</div>
+                  <div class="text-center text-sm font-medium text-gray-400">Rab</div>
+                  <div class="text-center text-sm font-medium text-gray-400">Kam</div>
+                  <div class="text-center text-sm font-medium text-gray-400">Jum</div>
+                  <div class="text-center text-sm font-medium text-gray-400">Sab</div>
+                  <div class="text-center text-sm font-medium text-gray-400">Min</div>
+                </div>
+                
+                <!-- Calendar grid -->
+                <div id="dates" class="grid grid-cols-7 gap-1"></div>
+                
+                <!-- Legend -->
+                <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500">
+                  <div class="flex items-center">
+                    <div class="w-3 h-3 rounded-full bg-black mr-2"></div>
+                    <span>Data tersedia</span>
+                  </div>
+                  <div class="flex items-center">
+                    <div class="w-3 h-3 rounded-full bg-gray-200 mr-2"></div>
+                    <span>Data tidak tersedia</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </nav>
@@ -106,9 +237,67 @@
     <main
       class="relative z-20 w-full p-4 rounded-2xl bg-gradient-to-b from-[#87db6b] to-[#006134] flex flex-col -mt-3 shadow-lg"
     >
+
+
+      <!-- Modal Daftarkan Tong -->
+      <div id="modalDaftarkan" class="hidden fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 flex items-center justify-center">
+        <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md mx-4 transform transition-all duration-300 scale-95 opacity-0" id="modalContent">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-semibold text-gray-800">Daftarkan Tong Sampah</h3>
+            <button id="btnCloseModal" class="text-gray-500 hover:text-gray-700 transition-colors">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+          
+          <form id="formDaftarTong" class="space-y-4">
+            <div>
+              <label for="namaTong" class="block text-sm font-medium text-gray-700 mb-1">Nama Tong Sampah</label>
+              <input
+                type="text"
+                id="namaTong"
+                name="namaTong"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors"
+                placeholder="Masukkan nama tong sampah"
+                required
+              />
+            </div>
+            
+            <div>
+              <label for="kodeTong" class="block text-sm font-medium text-gray-700 mb-1">Kode Tong</label>
+              <input
+                type="text"
+                id="kodeTong"
+                name="kodeTong"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors"
+                placeholder="Masukkan kode tong"
+                required
+              />
+            </div>
+            
+            <div class="flex justify-end gap-3 mt-6">
+              <button
+                type="button"
+                id="btnBatalModal"
+                class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+              >
+                Batal
+              </button>
+              <button
+                type="submit"
+                class="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
+              >
+                Daftarkan
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
       <!-- Kontainer Tong Sampah -->
       <div
-        class="flex flex-wrap justify-center gap-5 xl:gap-20 xl:mt-5 mb-5 max-w-screen-lg xl:max-w-screen-xl mx-auto"
+        class="flex flex-wrap justify-center gap-5 xl:gap-20 xl:mt-5 mb-5 max-w-screen-lg xl:max-w-screen-xl mx-auto lg:gap-10"
       >
         <!-- Tong sampah A -->
         <div
@@ -186,6 +375,7 @@
 
         <!-- Button Daftarkan (Responsif lg & xl) -->
         <button
+          onclick="openModal()"
           class="hidden lg:flex lg:mt-4 xl:mt-0 flex-col items-center justify-center text-center space-y-3 bg-[#018246] text-white font-poppins font-semibold rounded-2xl shadow-2xl w-64 h-64 xl:w-72 xl:h-80 transition-all duration-300 ease-in-out hover:bg-green-500 hover:-translate-y-1 hover:shadow-[0_0_25px_rgba(0,255,150,0.4)]"
         >
           <div
@@ -197,11 +387,70 @@
             Daftarkan
           </span>
         </button>
+
+        <!-- Modal Daftarkan Tong -->
+        <div id="modalDaftarkan" class="hidden fixed inset-0 bg-black/30 backdrop-blur-sm z-50">
+          <div class="fixed inset-0 flex items-center justify-center">
+            <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md mx-4 transform transition-all duration-300" id="modalContent">
+              <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-semibold text-[#018246]">Daftarkan Tong Sampah</h3>
+                <button id="btnCloseModal" class="text-gray-500 hover:text-gray-700 transition-colors">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                  </svg>
+                </button>
+              </div>
+              
+              <form id="formDaftarTong" class="space-y-5">
+                <div>
+                  <label for="namaTong" class="block text-sm font-medium text-gray-700 mb-2">Nama Tong Sampah</label>
+                  <input
+                    type="text"
+                    id="namaTong"
+                    name="namaTong"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#018246] focus:border-[#018246] transition-colors"
+                    placeholder="Masukkan nama tong sampah"
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <label for="kodeTong" class="block text-sm font-medium text-gray-700 mb-2">Kode Tong</label>
+                  <input
+                    type="text"
+                    id="kodeTong"
+                    name="kodeTong"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#018246] focus:border-[#018246] transition-colors"
+                    placeholder="Masukkan kode tong"
+                    required
+                  />
+                </div>
+                
+                <div class="flex justify-end gap-3 mt-8">
+                  <button
+                    type="button"
+                    id="btnBatalModal"
+                    class="px-6 py-2.5 border-2 border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50 transition-colors font-medium"
+                  >
+                    Batal
+                  </button>
+                  <button
+                    type="submit"
+                    class="px-6 py-2.5 bg-[#018246] text-white rounded-xl hover:bg-green-600 transition-colors font-medium shadow-lg hover:shadow-[0_0_15px_rgba(0,255,150,0.4)]"
+                  >
+                    Daftarkan
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- Button Daftarkan dll-->
+      <!-- Button Daftarkan Mobile -->
       <div>
         <button
+          onclick="openModal()"
           class="w-36 h-10 bg-[#018246] text-white font-poppins font-semibold rounded-3xl mx-auto block shadow-xl hover:bg-green-500 hover:scale-105 transition-all duration-300 ease-in-out lg:hidden"
         >
           Daftarkan
@@ -211,14 +460,14 @@
         >
           Menambahkan Tong Sampah Baru
         </p>
-        <h1 class="text-center text-2xl mt-5 mb-2 font-bold text-[#232323]">
+        <h1 class="text-center text-2xl lg:text-3xl mt-5 lg:mt-10 mb-2 font-bold text-[#232323]">
           Grafik Harian
         </h1>
       </div>
 
       <!-- DIAGRAM -->
       <div
-        class="w-full max-w-md lg:max-w-3xl xl:max-w-4xl mx-auto px-2 lg:px-6 mt-2 lg:mt-6"
+        class="w-full max-w-md lg:max-w-3xl xl:max-w-4xl mx-auto px-2 lg:px-6 mt-2 lg:mt-3"
       >
         <!-- header -->
         <div
@@ -237,8 +486,8 @@
           <!-- Dropdown Waktu -->
           <div class="relative">
             <button
-              id="dropdownButton"
-              class="bg-transparent border-b border-gray-300 focus:border-green-600 outline-none text-gray-800 font-medium py-1 lg:py-2 w-16 lg:w-28 text-sm lg:text-base transition flex items-center justify-between"
+              data-calendar="trigger"
+                class="bg-transparent border-b border-gray-300 focus:border-green-600 outline-none text-gray-800 font-medium py-1 lg:py-2 w-16 lg:w-28 text-sm lg:text-base transition flex items-center justify-between"
             >
               Waktu
               <svg
@@ -257,54 +506,69 @@
               </svg>
             </button>
 
-            <!-- Overlay + Kalender -->
-            <div
-              id="calendarOverlay"
-              class="hidden fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50"
-            >
-              <div
-                id="calendar"
-                class="bg-white border border-gray-200 rounded-xl shadow-2xl p-4 w-72 sm:w-80"
-              >
-                <div class="flex items-center justify-between mb-3">
-                  <button
-                    id="prevMonth"
-                    class="text-gray-600 hover:text-black text-lg"
-                  >
-                    ‹
-                  </button>
-                  <h2
-                    id="monthYear"
-                    class="text-center font-semibold text-gray-800 text-base"
-                  ></h2>
-                  <button
-                    id="nextMonth"
-                    class="text-gray-600 hover:text-black text-lg"
-                  >
-                    ›
-                  </button>
-                </div>
+            <!-- Calendar Overlay -->
+            <div id="calendarOverlay" class="hidden fixed inset-0 z-50">
+              <div class="calendar-backdrop fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm"></div>
+              <div class="fixed inset-0 flex items-center justify-center p-4">
+                <div class="bg-white rounded-xl shadow-2xl p-4 w-72 sm:w-80 transform transition-all duration-200">
+                  <!-- Calendar Header -->
+                  <div class="flex items-center justify-between mb-4">
+                    <button
+                      id="prevMonth"
+                      class="p-1 hover:bg-gray-100 rounded-lg transition-colors"
+                    >
+                      <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                      </svg>
+                    </button>
+                    <h2
+                      id="monthYear"
+                      class="text-lg font-semibold text-gray-800"
+                    ></h2>
+                    <button
+                      id="nextMonth"
+                      class="p-1 hover:bg-gray-100 rounded-lg transition-colors"
+                    >
+                      <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                      </svg>
+                    </button>
+                  </div>
 
-                <!-- Grid tanggal -->
-                <div
-                  id="dates"
-                  class="grid grid-cols-7 gap-1 text-center text-xs sm:text-sm text-gray-700"
-                ></div>
+                  <!-- Week days header -->
+                  <div class="grid grid-cols-7 mb-2">
+                    <div class="text-center text-sm font-medium text-gray-400">Sen</div>
+                    <div class="text-center text-sm font-medium text-gray-400">Sel</div>
+                    <div class="text-center text-sm font-medium text-gray-400">Rab</div>
+                    <div class="text-center text-sm font-medium text-gray-400">Kam</div>
+                    <div class="text-center text-sm font-medium text-gray-400">Jum</div>
+                    <div class="text-center text-sm font-medium text-gray-400">Sab</div>
+                    <div class="text-center text-sm font-medium text-gray-400">Min</div>
+                  </div>
+
+                  <!-- Calendar grid -->
+                  <div
+                    id="dates"
+                    class="grid grid-cols-7 gap-1"
+                  ></div>
+                </div>
               </div>
             </div>
           </div>
 
           <!-- Dropdown Kode Tong -->
           <select
+            id="kodeTong"
             class="bg-transparent border-b border-gray-300 focus:border-green-600 outline-none text-gray-800 font-medium py-1 lg:py-2 w-[90px] lg:w-36 text-sm lg:text-base transition"
           >
             <option class="text-xs p-1">Kode Tong</option>
-            <option>T01</option>
-            <option>T02</option>
+            <option value="T01">T01</option>
+            <option value="T02">T02</option>
           </select>
 
           <!-- Tombol Tampilkan -->
           <button
+            data-action="tampilkan"
             class="bg-green-700 hover:bg-green-800 text-white font-semibold text-sm lg:text-base py-1.5 lg:py-2.5 px-3 lg:px-6 rounded-full shadow-md hover:shadow-[0_0_10px_#87db6b] transition-all duration-300"
           >
             Tampilkan
@@ -313,6 +577,7 @@
 
         <!-- Box Hasil -->
         <div
+          id="boxHasil"
           class="mt-3 lg:mt-5 bg-white rounded-xl shadow-md lg:shadow-lg min-h-[250px] lg:min-h-[320px] flex items-center justify-center text-center text-gray-600 text-sm lg:text-base px-3 lg:px-8 py-4"
         >
           <div>
@@ -350,135 +615,7 @@
         </div>
       </div>
    
-   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-  const dropdownButton = document.getElementById("dropdownButton");
-  const calendarOverlay = document.getElementById("calendarOverlay");
-  const monthYear = document.getElementById("monthYear");
-  const datesContainer = document.getElementById("dates");
-  const prevMonth = document.getElementById("prevMonth");
-  const nextMonth = document.getElementById("nextMonth");
-
-  let currentDate = new Date();
-
-  function renderCalendar(date) {
-    datesContainer.innerHTML = "";
-    const year = date.getFullYear();
-    const month = date.getMonth();
-
-    monthYear.textContent = date.toLocaleString("id-ID", {
-      month: "long",
-      year: "numeric",
-    });
-
-    const firstDay = new Date(year, month, 1).getDay();
-    const lastDate = new Date(year, month + 1, 0).getDate();
-
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    const oneWeekAgo = new Date(today);
-    oneWeekAgo.setDate(today.getDate() - 6); // 7 hari terakhir
-
-    // Kosong di awal bulan biar grid rapi
-    for (let i = 0; i < (firstDay === 0 ? 6 : firstDay - 1); i++) {
-      const empty = document.createElement("div");
-      datesContainer.appendChild(empty);
-    }
-
-    // Loop setiap tanggal dalam bulan
-    for (let i = 1; i <= lastDate; i++) {
-      const thisDate = new Date(year, month, i);
-      thisDate.setHours(0, 0, 0, 0);
-
-      const dateElem = document.createElement("div");
-      dateElem.textContent = i;
-      dateElem.classList.add(
-        "rounded-md",
-        "py-1",
-        "text-sm",
-        "flex",
-        "items-center",
-        "justify-center",
-        "transition",
-        "duration-200"
-      );
-
-      // Jika tanggal masih dalam 7 hari terakhir (termasuk hari ini)
-      if (thisDate >= oneWeekAgo && thisDate <= today) {
-        dateElem.classList.add(
-          "bg-black",
-          "text-white",
-          "font-semibold",
-          "cursor-pointer",
-          "hover:bg-gray-800"
-        );
-
-        // Efek khusus untuk tanggal hari ini
-        if (thisDate.getTime() === today.getTime()) {
-          dateElem.classList.add(
-            "ring-2",
-            "ring-green-400",
-            "shadow-[0_0_10px_rgba(0,255,150,0.4)]",
-            "scale-105"
-          );
-        }
-
-        // Event klik hanya untuk tanggal dalam 7 hari terakhir
-        dateElem.addEventListener("click", () => {
-          alert("Tanggal dipilih: " + thisDate.toLocaleDateString("id-ID"));
-          calendarOverlay.classList.add("hidden");
-        });
-      }
-      // Jika tanggal sudah lampau lebih dari 7 hari lalu
-      else if (thisDate < oneWeekAgo) {
-        dateElem.classList.add(
-          "bg-transparent",
-          "text-gray-300",
-          "cursor-not-allowed",
-          "opacity-60"
-        );
-      }
-      // Jika tanggal di masa depan (setelah hari ini)
-      else {
-        dateElem.classList.add(
-          "bg-white",
-          "text-gray-300",
-          "cursor-not-allowed",
-          "opacity-60"
-        );
-      }
-
-      datesContainer.appendChild(dateElem);
-    }
-  }
-
-  // Tombol dropdown
-  dropdownButton.addEventListener("click", () => {
-    calendarOverlay.classList.toggle("hidden");
-    renderCalendar(currentDate);
-  });
-
-  // Navigasi bulan
-  prevMonth.addEventListener("click", () => {
-    currentDate.setMonth(currentDate.getMonth() - 1);
-    renderCalendar(currentDate);
-  });
-
-  nextMonth.addEventListener("click", () => {
-    currentDate.setMonth(currentDate.getMonth() + 1);
-    renderCalendar(currentDate);
-  });
-
-  // Klik di luar area menutup overlay
-  calendarOverlay.addEventListener("click", (e) => {
-    if (e.target === calendarOverlay) {
-      calendarOverlay.classList.add("hidden");
-    }
-  });
-});
-
-   </script>
+   <script src="js/calendar.js"></script>
 
 
   </body>
