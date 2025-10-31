@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./dist/output.css"/>
+    <link rel="stylesheet" href="./dist/output.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;600;700;800;900&family=Poppins:wght@100;300;400;500;600;700;800;900&family=Roboto:wght@100;300;400;500;700;900&display=swap"
       rel="stylesheet"
@@ -33,13 +33,25 @@
     </main>
 
     <!-- Bukit -->
-    <div class="relative -mt-72">
-      <img src="assets/Vector.png" alt="ombak 1" class="z-0" />
-      <img
-        src="assets/Vector 3.png"
-        alt="ombak 1"
-        class="z-100 absolute bottom-0"
-      />
+    <div class="relative -mt-72 w-full overflow-hidden">
+      <!-- Bukit Vector Layer -->
+      <svg
+        viewBox="0 0 1440 320"
+        preserveAspectRatio="none"
+        class="w-full h-auto"
+        style="min-height: 200px"
+      >
+        <!-- Bukit Belakang -->
+        <path
+          d="M0,96L48,106.7C96,117,192,139,288,154.7C384,171,480,181,576,165.3C672,149,768,107,864,90.7C960,75,1056,85,1152,101.3C1248,117,1344,139,1392,149.3L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+          fill="#47a83d"
+        />
+        <!-- Bukit Depan -->
+        <path
+          d="M0,192L48,181.3C96,171,192,149,288,144C384,139,480,149,576,165.3C672,181,768,203,864,197.3C960,192,1056,160,1152,144C1248,128,1344,128,1392,128L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+          fill="#006134"
+        />
+      </svg>
     </div>
   </body>
 </html>
