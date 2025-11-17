@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Test Fetch Data Sampah</title>
+    <script>
+      async function loadData() {
+        const output = document.getElementById("output");
+        output.textContent = "⏳ Mengambil data dari API...";
+
+        try {
+          const res = await fetch("https://nyampah-in.my.id/api/read.php");
+          const data = await res.json();
+          console.log(data);
+
+          // tampilkan ke halaman
+          let html =
+            "<table border='1' cellpadding='5'><tr><th>ID</th><th>Device</th><th>Volume (%)</th><th>Latitude</th><th>Longitude</th><th>Waktu</th></tr>";
+          data.forEach((row) => {
+            html += `<tr>
+            <td>${row.id}</td>
+            <td>${row.device}</td>
+            <td>${row.volume}</td>
+            <td>${row.latitude}</td>
+            <td>${row.longitude}</td>
+            <td>${row.waktu}</td>
+          </tr>`;
+          });
+          html += "</table>";
+          output.innerHTML = html;
+        } catch (err) {
+          output.textContent = "❌ Gagal fetch data: " + err;
+        }
+      }
+    </script>
+  </head>
+  <body onload="loadData()">
+    <h2>Data dari API nyampah-in.my.id</h2>
+    <div id="output">Menunggu data...</div>
+  </body>
+</html>

@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trash Talk - User Guide</title>
+    <link rel="stylesheet" href="./dist/output.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+      body {
+        font-family: "Poppins", sans-serif;
+      }
+      .card-hover {
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
+      }
+      .card-hover:hover {
+        transform: translateY(-5px);
+        box-shadow:
+          0 10px 25px -5px rgba(0, 0, 0, 0.1),
+          0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      }
+      .btn-hover {
+        transition: all 0.3s ease;
+      }
+      .btn-hover:hover {
+        transform: scale(1.05);
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 text-gray-800">
+    <!-- Header -->
+    <header class="bg-green-600 text-white py-6 shadow-md">
+      <div class="container mx-auto px-4">
+        <h1 class="text-3xl md:text-4xl font-bold text-center">
+          Trash Talk — User Guide
+        </h1>
+        <p class="text-lg md:text-xl text-center mt-2">
+          Panduan Penggunaan Aplikasi Monitoring Sampah
+        </p>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+      <!-- Introduction -->
+      <section class="mb-12">
+        <div class="bg-white rounded-xl shadow-md p-6 md:p-8 card-hover">
+          <h2 class="text-2xl font-bold text-green-700 mb-4">
+            Selamat Datang di Trash Talk
+          </h2>
+          <p class="mb-4">
+            Trash Talk adalah sistem monitoring tong sampah berbasis IoT yang
+            membantu Anda memantau status dan volume sampah di berbagai lokasi
+            secara real-time.
+          </p>
+          <!-- <div class="flex justify-center my-6">
+            <img
+              src="assets/i.png"
+              alt="Ilustrasi Sistem Trash Talk"
+              class="rounded-lg shadow-md max-w-full h-auto"
+            />
+          </div> -->
+          <p>
+            Panduan ini akan membantu Anda memahami cara menggunakan aplikasi
+            Trash Talk dengan efektif.
+          </p>
+        </div>
+      </section>
+
+      <!-- Guide Sections -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Cara Kerja Sistem -->
+        <section class="bg-white rounded-xl shadow-md p-6 card-hover">
+          <div class="flex items-center mb-4">
+            <div class="bg-green-100 p-3 rounded-full mr-4">
+              <i class="fas fa-cogs text-green-600 text-xl"></i>
+            </div>
+            <h2 class="text-xl font-bold text-green-700">
+              1. Cara Kerja Sistem
+            </h2>
+          </div>
+          <p class="mb-4">
+            Sistem Trash Talk menggunakan sensor IoT untuk memantau kondisi tong
+            sampah secara real-time.
+          </p>
+          <ul class="list-disc pl-5 space-y-2">
+            <li>
+              <span class="font-medium">Sensor Ultrasonik</span> mengukur volume
+              sampah dalam tong
+            </li>
+            <li>
+              <span class="font-medium">Sensor GPS Neo 6mv2</span> berfungsi
+              untuk menentukan posisi geografis (latitude dan longitude) tong
+              sampah
+            </li>
+            <li>
+              <span class="font-medium">Status Tong</span> ditentukan
+              berdasarkan kapasitas: kosong, sebagian terisi, atau penuh
+            </li>
+            <li>
+              <span class="font-medium">Data dikirim</span> ke server melalui
+              jaringan IoT untuk diproses dan ditampilkan
+            </li>
+          </ul>
+        </section>
+
+        <!-- Tampilan Dashboard -->
+        <section class="bg-white rounded-xl shadow-md p-6 card-hover">
+          <div class="flex items-center mb-4">
+            <div class="bg-blue-100 p-3 rounded-full mr-4">
+              <i class="fas fa-tachometer-alt text-blue-600 text-xl"></i>
+            </div>
+            <h2 class="text-xl font-bold text-blue-700">
+              2. Tampilan Dashboard
+            </h2>
+          </div>
+          <p class="mb-4">
+            Dashboard menampilkan status semua tong sampah dalam sistem dengan
+            indikator visual yang mudah dipahami.
+          </p>
+          <ul class="list-disc pl-5 space-y-2">
+            <li>
+              <span class="font-medium text-green-600">Hijau</span>: Tong kosong
+              atau sedikit terisi (0-50%)
+            </li>
+            <li>
+              <span class="font-medium text-yellow-600">Kuning</span>: Tong
+              setengah penuh (51-80%)
+            </li>
+            <li>
+              <span class="font-medium text-red-600">Merah</span>: Tong hampir
+              penuh atau penuh (81-100%)
+            </li>
+            <li>
+              <span class="font-medium text-gray-600">Abu-abu</span>: Sensor
+              tidak aktif atau error
+            </li>
+          </ul>
+          <p class="mt-4">
+            Ikon tong sampah akan berubah sesuai dengan status volume yang
+            terdeteksi.
+          </p>
+        </section>
+
+        <!-- Notifikasi & Peringatan -->
+        <section class="bg-white rounded-xl shadow-md p-6 card-hover">
+          <div class="flex items-center mb-4">
+            <div class="bg-yellow-100 p-3 rounded-full mr-4">
+              <i class="fas fa-bell text-yellow-600 text-xl"></i>
+            </div>
+            <h2 class="text-xl font-bold text-yellow-700">
+              3. Notifikasi & Peringatan
+            </h2>
+          </div>
+          <p class="mb-4">
+            Sistem akan mengirimkan notifikasi ketika terjadi kondisi tertentu
+            yang memerlukan perhatian.
+          </p>
+          <ul class="list-disc pl-5 space-y-2">
+            <li>
+              <span class="font-medium">Tong Penuh</span>: Notifikasi dikirim
+              ketika tong mencapai 80% kapasitas
+            </li>
+            <li>
+              <span class="font-medium">Error Sensor</span>: Peringatan ketika
+              sensor tidak mengirim data
+            </li>
+            <li>
+              <span class="font-medium">Kondisi Abnormal</span>: Peringatan
+              untuk kondisi tidak biasa seperti kebocoran atau kerusakan
+            </li>
+          </ul>
+          <p class="mt-4">
+            Notifikasi akan muncul di dashboard dan dapat dikonfigurasi untuk
+            dikirim via email atau SMS.
+          </p>
+        </section>
+
+        <!-- Cara Refresh Data -->
+        <section class="bg-white rounded-xl shadow-md p-6 card-hover">
+          <div class="flex items-center mb-4">
+            <div class="bg-purple-100 p-3 rounded-full mr-4">
+              <i class="fas fa-sync-alt text-purple-600 text-xl"></i>
+            </div>
+            <h2 class="text-xl font-bold text-purple-700">
+              4. Cara Refresh Data
+            </h2>
+          </div>
+          <p class="mb-4">
+            Data pada dashboard dapat diperbarui secara otomatis atau manual.
+          </p>
+          <ul class="list-disc pl-5 space-y-2">
+            <li>
+              <span class="font-medium">Auto-Update</span>: Data diperbarui
+              setiap 30 detik secara otomatis
+            </li>
+            <li>
+              <span class="font-medium">Manual Refresh</span>: Klik tombol
+              <i class="fas fa-sync-alt text-purple-500"></i> di pojok kanan
+              atas dashboard
+            </li>
+            <li>
+              <span class="font-medium">Force Refresh</span>: Tekan F5 atau
+              Ctrl+R untuk memuat ulang halaman
+            </li>
+          </ul>
+          <p class="mt-4">
+            Indikator loading akan muncul saat data sedang diperbarui.
+          </p>
+        </section>
+
+        <!-- Cara Menangani Error -->
+        <section class="bg-white rounded-xl shadow-md p-6 card-hover">
+          <div class="flex items-center mb-4">
+            <div class="bg-red-100 p-3 rounded-full mr-4">
+              <i class="fas fa-exclamation-triangle text-red-600 text-xl"></i>
+            </div>
+            <h2 class="text-xl font-bold text-red-700">
+              5. Cara Menangani Error
+            </h2>
+          </div>
+          <p class="mb-4">
+            Berikut adalah langkah-langkah untuk menangani masalah yang mungkin
+            terjadi:
+          </p>
+          <ul class="list-disc pl-5 space-y-2">
+            <li>
+              <span class="font-medium">Sensor Tidak Terbaca</span>: Periksa
+              koneksi power dan jaringan sensor
+            </li>
+            <li>
+              <span class="font-medium">Koneksi Internet</span>: Pastikan
+              perangkat terhubung ke internet
+            </li>
+            <li>
+              <span class="font-medium">Data Tidak Up-to-Date</span>: Lakukan
+              manual refresh atau periksa status server
+            </li>
+            <li>
+              <span class="font-medium">Tong Selalu Menunjukkan Penuh</span>:
+              Periksa apakah ada penghalang di depan sensor
+            </li>
+          </ul>
+          <p class="mt-4">
+            Jika masalah berlanjut, hubungi tim teknis untuk bantuan lebih
+            lanjut.
+          </p>
+        </section>
+
+        <!-- FAQ -->
+        <section
+          class="bg-white rounded-xl shadow-md p-6 md:col-span-2 card-hover"
+        >
+          <div class="flex items-center mb-4">
+            <div class="bg-indigo-100 p-3 rounded-full mr-4">
+              <i class="fas fa-question-circle text-indigo-600 text-xl"></i>
+            </div>
+            <h2 class="text-xl font-bold text-indigo-700">
+              6. FAQ (Pertanyaan Umum)
+            </h2>
+          </div>
+          <div class="space-y-4">
+            <div class="border-l-4 border-indigo-500 pl-4 py-1">
+              <h3 class="font-semibold">
+                Seberapa akurat pengukuran volume sampah?
+              </h3>
+              <p class="mt-1">
+                Sensor ultrasonik memiliki akurasi ±3% dalam kondisi normal.
+                Faktor seperti bentuk sampah dan kelembaban dapat mempengaruhi
+                akurasi.
+              </p>
+            </div>
+            <div class="border-l-4 border-indigo-500 pl-4 py-1">
+              <h3 class="font-semibold">
+                Berapa lama baterai sensor bertahan?
+              </h3>
+              <p class="mt-1">
+                Dengan pengaturan default, baterai lithium dapat bertahan 6-12
+                bulan tergantung frekuensi pengiriman data.
+              </p>
+            </div>
+            <div class="border-l-4 border-indigo-500 pl-4 py-1">
+              <h3 class="font-semibold">
+                Bagaimana cara menambahkan tong sampah baru ke sistem?
+              </h3>
+              <p class="mt-1">
+                Hubungi administrator untuk mendaftarkan perangkat sensor baru.
+                Setelah terdaftar, tong akan muncul di dashboard secara
+                otomatis.
+              </p>
+            </div>
+            <div class="border-l-4 border-indigo-500 pl-4 py-1">
+              <h3 class="font-semibold">Apakah data saya aman?</h3>
+              <p class="mt-1">
+                Ya, semua data dienkripsi selama transmisi dan disimpan di
+                server yang aman dengan akses terbatas.
+              </p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Back to Dashboard Button -->
+      <div class="flex justify-center mt-12">
+        <a
+          href="home.html"
+          class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full shadow-lg btn-hover transition duration-300 flex items-center"
+        >
+          <i class="fas fa-arrow-left mr-2"></i> Kembali ke Dashboard
+        </a>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6 mt-12">
+      <div class="container mx-auto px-4 text-center">
+        <p>&copy; 2025 Trash Talk - Sistem Monitoring Sampah IoT.</p>
+        <p class="mt-2 text-gray-400">By Feldo Razzan Susdiantoro</p>
+      </div>
+    </footer>
+  </body>
+</html>

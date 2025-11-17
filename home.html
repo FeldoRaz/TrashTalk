@@ -1,130 +1,70 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./dist/output.css" />
+    <link rel="stylesheet" href="css/trash-anime.css" />
 
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;600;700;800;900&family=Poppins:wght@100;300;400;500;600;700;800;900&family=Roboto:wght@100;300;400;500;700;900&display=swap"
       rel="stylesheet"
     />
+
+    <!-- Leaflet CSS & JS -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
     <title>TrashTalk</title>
 
-    <!-- <style>
-      *{
-        border: 2px solid red;
-      }; 
-    </style> -->
-    
-    <!-- Load JavaScript files -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script defer src="js/calendar.js"></script>
-    <script defer src="js/diagram.js"></script>
-    
-    <!-- Script untuk modal daftar tong -->
-    <script>
-      function openModal() {
-        const modal = document.getElementById('modalDaftarkan');
-        const modalContent = document.getElementById('modalContent');
-        
-        // Tampilkan modal
-        modal.classList.remove('hidden');
-        
-        // Animasi fade in
-        requestAnimationFrame(() => {
-          modal.style.opacity = '1';
-          modalContent.style.transform = 'scale(1)';
-          modalContent.style.opacity = '1';
-        });
-      }
+    <script src="js/overLevel.js"></script>
+    <script src="js/mapHandler.js"></script>
+    <script src="js/mapAll.js"></script>
+    <script src="js/waktuNav.js"></script>
+    <script src="js/daftarkan.js"></script>
 
-      function closeModal() {
-        const modal = document.getElementById('modalDaftarkan');
-        const modalContent = document.getElementById('modalContent');
-        
-        // Animasi fade out
-        modal.style.opacity = '0';
-        modalContent.style.transform = 'scale(0.95)';
-        modalContent.style.opacity = '0';
-        
-        // Sembunyikan modal setelah animasi
-        setTimeout(() => {
-          modal.classList.add('hidden');
-          modal.style.opacity = '';
-          modalContent.style.transform = '';
-          modalContent.style.opacity = '';
-        }, 300);
-      }
-
-      // Event listener saat dokumen dimuat
-      document.addEventListener('DOMContentLoaded', () => {
-        const modal = document.getElementById('modalDaftarkan');
-        const btnCloseModal = document.getElementById('btnCloseModal');
-        const btnBatalModal = document.getElementById('btnBatalModal');
-        const formDaftarTong = document.getElementById('formDaftarTong');
-
-        // Event untuk tombol close dan batal
-        if (btnCloseModal) btnCloseModal.addEventListener('click', closeModal);
-        if (btnBatalModal) btnBatalModal.addEventListener('click', closeModal);
-
-        // Tutup modal saat klik di luar
-        modal.addEventListener('click', (e) => {
-          if (e.target === modal) closeModal();
-        });
-
-        // Handle form submission
-        formDaftarTong.addEventListener('submit', (e) => {
-          e.preventDefault();
-          
-          const namaTong = document.getElementById('namaTong').value;
-          const kodeTong = document.getElementById('kodeTong').value;
-
-          console.log('Data yang akan dikirim:', { nama: namaTong, kode: kodeTong });
-          
-          // Reset form dan tutup modal
-          formDaftarTong.reset();
-          closeModal();
-
-          // Notifikasi sukses sederhana
-          alert('Tong sampah berhasil didaftarkan!');
-        });
-
-        // Tutup modal dengan tombol Escape
-        document.addEventListener('keydown', (e) => {
-          if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
-            closeModal();
-          }
-        });
-      });
-    </script>
+    <!-- <script src="js/mapAll.js"></script> -->
   </head>
   <body class="min-h-screen">
     <nav>
-      <div
-        class="flex justify-center items-center xl:items-start xl:justify-start xl:ml-5 xl:mt-3 mt-8 gap-1"
-      >
-        <div class="relative w-8 h-8">
-          <img
-            src="assets/sampah.png"
-            alt="logo kecil"
-            class="w-full h-full object-contain"
-          />
-          <img
-            src="assets/riak.png"
-            alt="ikon tambahan"
-            class="absolute inset-0 m-auto -translate-x-[0.5px] translate-y-1 xl:w-5 xl:h-5 xl:mr-[5.5px] object-contain"
-          />
+      <!-- Navbar atas -->
+      <div class="flex justify-between items-center pr-2 pl-2">
+        <div
+          class="flex justify-center items-center xl:items-start xl:justify-start xl:ml-5 xl:mt-3 mt-8 gap-1"
+        >
+          <div class="relative w-8 h-8 -mt-5 xl:mt-2 lg:mt-2">
+            <img
+              src="assets/sampah.png"
+              alt="logo kecil"
+              class="w-full h-full object-contain"
+            />
+            <img
+              src="assets/riak.png"
+              alt="ikon tambahan"
+              class="absolute inset-0 m-auto -translate-x-[0.5px] translate-y-1 xl:w-5 xl:h-5 xl:mr-[5.5px] object-contain"
+            />
+          </div>
+
+          <h1
+            class="font-poppins font-bold text-2xl xl:text-4xl text-black -mt-5 xl:mt-2 lg:mt-2"
+          >
+            Trash Talk
+          </h1>
         </div>
 
-        <!-- Teks -->
-        <h1 class="font-poppins font-bold text-2xl xl:text-4xl text-black">
-          Trash Talk
-        </h1>
+        <a
+          href="guide.html"
+          class="relative z-50 mt-2 w-10 h-10 rounded-full border border-slate-700 flex justify-center items-center hover:bg-slate-200 transition"
+        >
+          <img src="assets/i.png" class="w-6 h-6 object-contain" />
+        </a>
       </div>
 
       <div class="relative w-full overflow-hidden z-0 -mt-24 xl:-mt-32">
-        <!-- SVG -->
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 512 84"
@@ -142,118 +82,64 @@
             d="M0,50 C90,75 100,30 200,48 C350,70 420,30 512,55 L512,84 L0,84 Z"
           />
         </svg>
-
-        <!-- pohon kiri -->
+        <!-- Waktu Terakhir Update -->
         <div
-          class="absolute z-20"
-          style="
-            left: 6vw; /* posisi horizontal fleksibel */
-            bottom: 19vw; /* tinggi dari bawah bukit */
-            transform: scale(1); /* ubah ukuran sesuai selera */
-          "
-        >
-          <img
-            src="assets/pohonk.png"
-            alt="pohon kiri"
-            class="w-[12vw] max-w-[100px] object-contain"
-          />
-        </div>
-
-        <!-- pohon kanan -->
-        <div
-          class="absolute z-20"
-          style="right: 12vw; bottom: 26vw; transform: scale(0.9)"
-        >
-          <img
-            src="assets/pohoni.png"
-            alt="pohon kanan"
-            class="w-[10vw] max-w-[90px] object-contain"
-          />
-        </div>
-
-        <!-- waktu -->
-        <div
+          id="updateTimeContainer"
           class="xl:w-56 xl:h-9 xl:-mt-1 absolute left-1/2 -translate-x-1/2 top-[165px] bg-white rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.1)] hover:shadow-[0_6px_16px_rgba(0,0,0,0.15)] transition-shadow duration-300 p-1 w-40 text-center z-20 cursor-pointer group"
-          data-calendar="trigger"
         >
           <h2
+            id="updateTime"
             class="font-digital xl:font-medium mt-1 tracking-tighter font-medium text-xs xl:text-sm text-gray-800 group-hover:text-emerald-600 transition-colors duration-200"
           >
-            20-10-2025, 10:42
+            Memuat waktu...
           </h2>
-          
-          <!-- Calendar Overlay -->
-          <div id="calendarOverlay" class="hidden fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm z-50 transition-all duration-300">
-            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-              <div class="bg-white rounded-2xl shadow-2xl p-4 min-w-[320px]">
-                <!-- Calendar Header -->
-                <div class="flex items-center justify-between mb-4">
-                  <button id="prevMonth" class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                    <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                    </svg>
-                  </button>
-                  <h3 id="monthYear" class="text-lg font-semibold text-gray-800"></h3>
-                  <button id="nextMonth" class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                    <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                    </svg>
-                  </button>
-                </div>
-                
-                <!-- Week days header -->
-                <div class="grid grid-cols-7 mb-2">
-                  <div class="text-center text-sm font-medium text-gray-400">Sen</div>
-                  <div class="text-center text-sm font-medium text-gray-400">Sel</div>
-                  <div class="text-center text-sm font-medium text-gray-400">Rab</div>
-                  <div class="text-center text-sm font-medium text-gray-400">Kam</div>
-                  <div class="text-center text-sm font-medium text-gray-400">Jum</div>
-                  <div class="text-center text-sm font-medium text-gray-400">Sab</div>
-                  <div class="text-center text-sm font-medium text-gray-400">Min</div>
-                </div>
-                
-                <!-- Calendar grid -->
-                <div id="dates" class="grid grid-cols-7 gap-1"></div>
-                
-                <!-- Legend -->
-                <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500">
-                  <div class="flex items-center">
-                    <div class="w-3 h-3 rounded-full bg-black mr-2"></div>
-                    <span>Data tersedia</span>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="w-3 h-3 rounded-full bg-gray-200 mr-2"></div>
-                    <span>Data tidak tersedia</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </nav>
 
-    <!-- main -->
     <main
       class="relative z-20 w-full p-4 rounded-2xl bg-gradient-to-b from-[#87db6b] to-[#006134] flex flex-col -mt-3 shadow-lg"
     >
-
-
-      <!-- Modal Daftarkan Tong -->
-      <div id="modalDaftarkan" class="hidden fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 flex items-center justify-center">
-        <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md mx-4 transform transition-all duration-300 scale-95 opacity-0" id="modalContent">
+      <!-- dimatikan, item daftar -->
+      <!-- <div
+        id="modalDaftarkan"
+        class="hidden fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 flex items-center justify-center"
+      >
+        <div
+          class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md mx-4 transform transition-all duration-300 scale-95 opacity-0"
+          id="modalContent"
+        >
           <div class="flex justify-between items-center mb-4">
-            <h3 class="text-xl font-semibold text-gray-800">Daftarkan Tong Sampah</h3>
-            <button id="btnCloseModal" class="text-gray-500 hover:text-gray-700 transition-colors">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            <h3 class="text-xl font-semibold text-gray-800">
+              Daftarkan Tong Sampah
+            </h3>
+            <button
+              id="btnCloseModal"
+              class="text-gray-500 hover:text-gray-700 transition-colors"
+            >
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                ></path>
               </svg>
             </button>
           </div>
-          
+
           <form id="formDaftarTong" class="space-y-4">
             <div>
-              <label for="namaTong" class="block text-sm font-medium text-gray-700 mb-1">Nama Tong Sampah</label>
+              <label
+                for="namaTong"
+                class="block text-sm font-medium text-gray-700 mb-1"
+                >Nama Tong Sampah</label
+              >
               <input
                 type="text"
                 id="namaTong"
@@ -263,9 +149,13 @@
                 required
               />
             </div>
-            
+
             <div>
-              <label for="kodeTong" class="block text-sm font-medium text-gray-700 mb-1">Kode Tong</label>
+              <label
+                for="kodeTong"
+                class="block text-sm font-medium text-gray-700 mb-1"
+                >Kode Tong</label
+              >
               <input
                 type="text"
                 id="kodeTong"
@@ -275,7 +165,7 @@
                 required
               />
             </div>
-            
+
             <div class="flex justify-end gap-3 mt-6">
               <button
                 type="button"
@@ -293,88 +183,143 @@
             </div>
           </form>
         </div>
-      </div>
+      </div> -->
 
-      <!-- Kontainer Tong Sampah -->
+      <!-- Kontainer Tong sampah -->
       <div
         class="flex flex-wrap justify-center gap-5 xl:gap-20 xl:mt-5 mb-5 max-w-screen-lg xl:max-w-screen-xl mx-auto lg:gap-10"
       >
-        <!-- Tong sampah A -->
         <div
-          class="w-36 h-52 lg:w-64 lg:h-72 xl:w-72 xl:h-80 bg-white rounded-xl shadow-[4px_4px_10px_rgba(0,0,0,0.30)] transition-all duration-300 hover:scale-[1.03]"
+          class="relative flex flex-col items-center w-36 h-52 lg:w-64 lg:h-72 xl:w-72 xl:h-80 bg-white rounded-xl shadow-[4px_4px_10px_rgba(0,0,0,0.30)] transition-all duration-300 hover:scale-[1.03]"
         >
           <h4
             class="text-center text-[#006134] mt-2 font-poppins text-sm lg:text-lg xl:text-xl font-semibold"
           >
-            Tong Sampah 1
+            Kayangan
           </h4>
           <div
             class="w-32 lg:w-56 xl:w-64 rounded-lg mx-auto mt-2 p-2 shadow-[4px_4px_10px_rgba(0,0,0,0.20)] transition-shadow duration-300 hover:shadow-[0_0_15px_3px_rgba(135,219,107,0.9)]"
           >
-            <img
-              src="assets/sampah.png"
-              alt="Trash Icon"
-              class="h-20 lg:h-36 xl:h-44 w-auto mx-auto block object-contain"
-            />
+            <div class="relative trash-visual h-20 lg:h-36 xl:h-44">
+              <img
+                src="assets/sampahp.png"
+                alt="Trash Icon"
+                class="h-full w-auto mx-auto block object-contain relative z-10"
+              />
+              <div
+                class="w-10 lg:w-16 xl:w-20 absolute bottom-0 left-0 right-0 trash-overlay rounded-b-lg mx-auto"
+                style="height: -10%; background-color: #87db6b"
+                data-device="Kayangan"
+              ></div>
+            </div>
             <div class="flex items-center justify-center">
-              <div class="w-3 h-3 bg-red-500 rounded-full mr-1 mt-3"></div>
-              <p class="text-base lg:text-lg xl:text-lg text-center mt-3">
-                Penuh
-                <span class="text-[#006134] font-semibold text-md xl:text-lg"
+              <div
+                class="w-3 h-3 bg-red-500 rounded-full mr-1 mt-3 trash-indicator"
+              ></div>
+              <p class="text-xs lg:text-lg xl:text-lg text-center mt-3">
+                <span class="trash-status">Penuh</span>
+                <span
+                  class="text-[#006134] font-semibold text-md xl:text-lg trash-percentage"
                   >100%</span
                 >
               </p>
             </div>
           </div>
-          <button
-            class="w-32 h-6 lg:w-36 lg:h-7 xl:w-40 xl:h-8 bg-[#018246] shadow-lg mx-auto mt-2 rounded-3xl flex items-center justify-center gap-1 px-2 hover:bg-green-500 text-slate-100 font-poppins text-xs lg:text-sm xl:text-base font-semibold transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2"
-          >
-            <span class="flex items-center gap-1">
-              Lacak Lokasi
-              <img src="assets/location.png" alt="lokasi" class="h-4 w-4" />
-            </span>
-          </button>
+          <div class="flex flex-col items-center relative w-full">
+            <button
+              id="trackBtn"
+              class="w-32 h-6 lg:w-36 lg:h-7 xl:w-40 xl:h-8 bg-[#018246] shadow-lg mx-auto mt-2 rounded-3xl flex items-center justify-center gap-1 px-2 hover:bg-green-500 text-slate-100 font-poppins text-xs lg:text-sm xl:text-base font-semibold transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2"
+            >
+              <span class="flex items-center gap-1">
+                Lacak Lokasi
+                <img src="assets/location.png" alt="lokasi" class="h-4 w-4" />
+              </span>
+            </button>
+            <!-- map show -->
+            <div
+              id="mapContainer"
+              class="absolute bottom-10 hidden w-[90%] h-36 sm:h-60 md:h-64 lg:h-60 xl:h-64 rounded-xl shadow-xl border border-gray-300 overflow-hidden bg-white transition-all duration-300 ease-in-out opacity-0 z-50"
+            >
+              <button
+                id="closeMap"
+                class="absolute top-2 right-2 bg-white rounded-full shadow px-2 text-gray-700 font-bold hover:text-red-500 z-20"
+              >
+                ×
+              </button>
+              <div id="map" class="w-full h-full rounded-lg z-0"></div>
+            </div>
+          </div>
         </div>
+        <!-- akhir tong A -->
 
-        <!-- Tong sampah B -->
         <div
           class="w-36 h-52 lg:w-64 lg:h-72 xl:w-72 xl:h-80 bg-white rounded-xl shadow-[4px_4px_10px_rgba(0,0,0,0.30)] transition-all duration-300 hover:scale-[1.03]"
         >
           <h4
             class="text-center text-[#006134] mt-2 font-poppins text-sm lg:text-lg xl:text-xl font-semibold"
           >
-            Tong Sampah 2
+            Nirmala
           </h4>
           <div
             class="w-32 lg:w-56 xl:w-64 rounded-lg mx-auto mt-2 p-2 shadow-[4px_4px_10px_rgba(0,0,0,0.20)] transition-shadow duration-300 hover:shadow-[0_0_15px_3px_rgba(135,219,107,0.9)]"
           >
-            <img
-              src="assets/sampah.png"
-              alt="Trash Icon"
-              class="h-20 lg:h-36 xl:h-44 w-auto mx-auto block object-contain"
-            />
+            <div class="relative trash-visual h-20 lg:h-36 xl:h-44">
+              <img
+                src="assets/sampahp.png"
+                alt="Trash Icon"
+                class="h-full w-auto mx-auto block object-contain relative z-10"
+              />
+              <div
+                class="w-10 lg:w-16 xl:w-20 absolute bottom-0 left-0 right-0 trash-overlay rounded-b-lg mx-auto"
+                style="height: 0%; background-color: #87db6b"
+                data-device="Nirmala"
+              ></div>
+            </div>
             <div class="flex items-center justify-center">
               <div
-                class="w-2 h-2 xl:w-3 xl:h-3 bg-yellow-300 rounded-full mr-1 mt-3"
+                class="w-3 h-3 bg-red-500 rounded-full mr-1 mt-3 trash-indicator"
               ></div>
-              <p class="text-base lg:text-lg xl:text-lg text-center mt-3">
-                Sedang
-                <span class="text-[#006134] font-semibold text-md">25%</span>
+              <p class="text-xs lg:text-lg xl:text-lg text-center mt-3">
+                <span class="trash-status">Penuh</span>
+                <span
+                  class="text-[#006134] font-semibold text-md xl:text-lg trash-percentage"
+                  >100%</span
+                >
               </p>
             </div>
           </div>
-          <button
-            class="w-32 h-6 lg:w-36 lg:h-7 xl:w-40 xl:h-8 bg-[#018246] shadow-lg mx-auto mt-2 rounded-3xl flex items-center justify-center gap-1 px-2 hover:bg-green-500 text-slate-100 font-poppins text-xs lg:text-sm xl:text-base font-semibold transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2"
-          >
-            <span class="flex items-center gap-1">
-              Lacak Lokasi
-              <img src="assets/location.png" alt="lokasi" class="h-4 w-4" />
-            </span>
-          </button>
-        </div>
 
-        <!-- Button Daftarkan (Responsif lg & xl) -->
-        <button
+          <!-- Tong Sampah B (Nirmala) -->
+          <div class="flex flex-col items-center relative w-full">
+            <button
+              id="trackBtnNirmala"
+              class="w-32 h-6 lg:w-36 lg:h-7 xl:w-40 xl:h-8 bg-[#018246] shadow-lg mx-auto mt-2 rounded-3xl flex items-center justify-center gap-1 px-2 hover:bg-green-500 text-slate-100 font-poppins text-xs lg:text-sm xl:text-base font-semibold transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2"
+            >
+              <span class="flex items-center gap-1">
+                Lacak Lokasi
+                <img src="assets/location.png" alt="lokasi" class="h-4 w-4" />
+              </span>
+            </button>
+
+            <!-- Popup Map -->
+            <div
+              id="mapContainerNirmala"
+              class="absolute bottom-10 hidden w-[90%] h-36 sm:h-60 md:h-64 lg:h-60 xl:h-64 rounded-xl shadow-xl border border-gray-300 overflow-hidden bg-white transition-all duration-300 ease-in-out opacity-0 z-50"
+            >
+              <button
+                id="closeMapNirmala"
+                class="absolute top-2 right-2 bg-white rounded-full shadow px-2 text-gray-700 font-bold hover:text-red-500 z-20"
+              >
+                ×
+              </button>
+              <div id="mapNirmala" class="w-full h-full rounded-lg z-0"></div>
+            </div>
+          </div>
+        </div>
+        <!-- akhir tong B -->
+
+        <!-- Daftarkan -->
+        <!-- <button
           onclick="openModal()"
           class="hidden lg:flex lg:mt-4 xl:mt-0 flex-col items-center justify-center text-center space-y-3 bg-[#018246] text-white font-poppins font-semibold rounded-2xl shadow-2xl w-64 h-64 xl:w-72 xl:h-80 transition-all duration-300 ease-in-out hover:bg-green-500 hover:-translate-y-1 hover:shadow-[0_0_25px_rgba(0,255,150,0.4)]"
         >
@@ -386,24 +331,48 @@
           <span class="text-lg xl:text-xl font-semibold tracking-wide">
             Daftarkan
           </span>
-        </button>
+        </button> -->
 
-        <!-- Modal Daftarkan Tong -->
-        <div id="modalDaftarkan" class="hidden fixed inset-0 bg-black/30 backdrop-blur-sm z-50">
+        <!-- <div
+          id="modalDaftarkan"
+          class="hidden fixed inset-0 bg-black/30 backdrop-blur-sm z-50"
+        >
           <div class="fixed inset-0 flex items-center justify-center">
-            <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md mx-4 transform transition-all duration-300" id="modalContent">
+            <div
+              class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md mx-4 transform transition-all duration-300"
+              id="modalContent"
+            >
               <div class="flex justify-between items-center mb-6">
-                <h3 class="text-2xl font-semibold text-[#018246]">Daftarkan Tong Sampah</h3>
-                <button id="btnCloseModal" class="text-gray-500 hover:text-gray-700 transition-colors">
-                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                <h3 class="text-2xl font-semibold text-[#018246]">
+                  Daftarkan Tong Sampah
+                </h3>
+                <button
+                  id="btnCloseModal"
+                  class="text-gray-500 hover:text-gray-700 transition-colors"
+                >
+                  <svg
+                    class="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    ></path>
                   </svg>
                 </button>
               </div>
-              
+
               <form id="formDaftarTong" class="space-y-5">
                 <div>
-                  <label for="namaTong" class="block text-sm font-medium text-gray-700 mb-2">Nama Tong Sampah</label>
+                  <label
+                    for="namaTong"
+                    class="block text-sm font-medium text-gray-700 mb-2"
+                    >Nama Tong Sampah</label
+                  >
                   <input
                     type="text"
                     id="namaTong"
@@ -413,9 +382,13 @@
                     required
                   />
                 </div>
-                
+
                 <div>
-                  <label for="kodeTong" class="block text-sm font-medium text-gray-700 mb-2">Kode Tong</label>
+                  <label
+                    for="kodeTong"
+                    class="block text-sm font-medium text-gray-700 mb-2"
+                    >Kode Tong</label
+                  >
                   <input
                     type="text"
                     id="kodeTong"
@@ -425,7 +398,7 @@
                     required
                   />
                 </div>
-                
+
                 <div class="flex justify-end gap-3 mt-8">
                   <button
                     type="button"
@@ -444,11 +417,10 @@
               </form>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
 
-      <!-- Button Daftarkan Mobile -->
-      <div>
+      <!-- <div>
         <button
           onclick="openModal()"
           class="w-36 h-10 bg-[#018246] text-white font-poppins font-semibold rounded-3xl mx-auto block shadow-xl hover:bg-green-500 hover:scale-105 transition-all duration-300 ease-in-out lg:hidden"
@@ -460,163 +432,176 @@
         >
           Menambahkan Tong Sampah Baru
         </p>
-        <h1 class="text-center text-2xl lg:text-3xl mt-5 lg:mt-10 mb-2 font-bold text-[#232323]">
-          Grafik Harian
-        </h1>
-      </div>
-
-      <!-- DIAGRAM -->
-      <div
-        class="w-full max-w-md lg:max-w-3xl xl:max-w-4xl mx-auto px-2 lg:px-6 mt-2 lg:mt-3"
+      </div> -->
+      <h1
+        class="text-center text-2xl lg:text-3xl mt-5 lg:mt-10 mb-2 font-bold text-[#232323]"
       >
-        <!-- header -->
-        <div
-          class="flex flex-wrap items-center justify-between bg-white rounded-lg p-2 lg:p-4 shadow-sm lg:shadow-md lg:justify-evenly xl:justify-evenly"
-        >
-          <div
-            class="flex items-center justify-center w-9 h-9 lg:w-12 lg:h-12 bg-gray-100 rounded-lg shadow-sm hover:shadow-md hover:bg-gray-200 transition"
-          >
-            <img
-              src="assets/filter.png"
-              alt="ikon filter"
-              class="w-6 h-6 lg:w-8 lg:h-8 object-contain"
+        Grafik Harian
+      </h1>
+
+      <!-- FILTER WAKTU & KODE TONG -->
+      <!-- FILTER WAKTU & KODE TONG -->
+      <div
+        class="w-full max-w-md lg:max-w-3xl xl:max-w-4xl mx-auto px-3 mt-2 lg:mt-3"
+      >
+        <!-- FILTER BOX -->
+        <div class="w-full bg-white rounded-lg p-3 shadow-sm mt-3">
+          <div class="grid grid-cols-3 gap-3">
+            <!-- TANGGAL -->
+            <input
+              type="date"
+              id="filterTanggal"
+              class="w-full border-b border-gray-300 focus:border-green-600 outline-none pb-1 text-gray-800 text-sm"
             />
-          </div>
 
-          <!-- Dropdown Waktu -->
-          <div class="relative">
-            <button
-              data-calendar="trigger"
-                class="bg-transparent border-b border-gray-300 focus:border-green-600 outline-none text-gray-800 font-medium py-1 lg:py-2 w-16 lg:w-28 text-sm lg:text-base transition flex items-center justify-between"
+            <!-- KODE TONG -->
+            <select
+              id="filterTong"
+              class="w-full border-b border-gray-300 focus:border-green-600 outline-none pb-1 text-gray-800 text-sm"
             >
-              Waktu
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="w-4 h-4 ml-1"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
+              <option value="">Kode Tong</option>
+              <option value="Nirmala">T01 - Nirmala</option>
+              <option value="Kayangan">T02 - Kayangan</option>
+            </select>
+
+            <!-- TOMBOL -->
+            <button
+              id="btnFilter"
+              class="w-full bg-green-700 hover:bg-green-800 text-white font-semibold text-sm py-2 rounded-full shadow-md transition-all"
+            >
+              Tampilkan
             </button>
-
-            <!-- Calendar Overlay -->
-            <div id="calendarOverlay" class="hidden fixed inset-0 z-50">
-              <div class="calendar-backdrop fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm"></div>
-              <div class="fixed inset-0 flex items-center justify-center p-4">
-                <div class="bg-white rounded-xl shadow-2xl p-4 w-72 sm:w-80 transform transition-all duration-200">
-                  <!-- Calendar Header -->
-                  <div class="flex items-center justify-between mb-4">
-                    <button
-                      id="prevMonth"
-                      class="p-1 hover:bg-gray-100 rounded-lg transition-colors"
-                    >
-                      <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                      </svg>
-                    </button>
-                    <h2
-                      id="monthYear"
-                      class="text-lg font-semibold text-gray-800"
-                    ></h2>
-                    <button
-                      id="nextMonth"
-                      class="p-1 hover:bg-gray-100 rounded-lg transition-colors"
-                    >
-                      <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                      </svg>
-                    </button>
-                  </div>
-
-                  <!-- Week days header -->
-                  <div class="grid grid-cols-7 mb-2">
-                    <div class="text-center text-sm font-medium text-gray-400">Sen</div>
-                    <div class="text-center text-sm font-medium text-gray-400">Sel</div>
-                    <div class="text-center text-sm font-medium text-gray-400">Rab</div>
-                    <div class="text-center text-sm font-medium text-gray-400">Kam</div>
-                    <div class="text-center text-sm font-medium text-gray-400">Jum</div>
-                    <div class="text-center text-sm font-medium text-gray-400">Sab</div>
-                    <div class="text-center text-sm font-medium text-gray-400">Min</div>
-                  </div>
-
-                  <!-- Calendar grid -->
-                  <div
-                    id="dates"
-                    class="grid grid-cols-7 gap-1"
-                  ></div>
-                </div>
-              </div>
-            </div>
           </div>
-
-          <!-- Dropdown Kode Tong -->
-          <select
-            id="kodeTong"
-            class="bg-transparent border-b border-gray-300 focus:border-green-600 outline-none text-gray-800 font-medium py-1 lg:py-2 w-[90px] lg:w-36 text-sm lg:text-base transition"
-          >
-            <option class="text-xs p-1">Kode Tong</option>
-            <option value="T01">T01</option>
-            <option value="T02">T02</option>
-          </select>
-
-          <!-- Tombol Tampilkan -->
-          <button
-            data-action="tampilkan"
-            class="bg-green-700 hover:bg-green-800 text-white font-semibold text-sm lg:text-base py-1.5 lg:py-2.5 px-3 lg:px-6 rounded-full shadow-md hover:shadow-[0_0_10px_#87db6b] transition-all duration-300"
-          >
-            Tampilkan
-          </button>
         </div>
 
-        <!-- Box Hasil -->
-        <div
-          id="boxHasil"
-          class="mt-3 lg:mt-5 bg-white rounded-xl shadow-md lg:shadow-lg min-h-[250px] lg:min-h-[320px] flex items-center justify-center text-center text-gray-600 text-sm lg:text-base px-3 lg:px-8 py-4"
-        >
-          <div>
-            <p class="font-semibold text-gray-800">
-              Tidak ada data yang ditampilkan.
-            </p>
-            <p>Gunakan filter waktu dan kode tong untuk memuat diagram.</p>
+        <!-- HASIL -->
+        <div class="w-full mt-3">
+          <div
+            id="boxHasil"
+            class="bg-white rounded-xl shadow-md lg:shadow-lg min-h-[250px] lg:min-h-[320px] flex items-center justify-center text-center text-gray-600 text-sm lg:text-base px-3 py-4"
+          >
+            <div>
+              <p class="font-semibold text-gray-800">
+                Tidak ada data yang ditampilkan.
+              </p>
+              <p>Gunakan filter waktu dan kode tong untuk memuat data.</p>
+            </div>
           </div>
         </div>
       </div>
     </main>
 
-    <!-- Kontainer Peta -->
+    <!-- Lokasi Semua Tong Sampah -->
     <div
       class="w-[345px] md:w-full lg:w-full xl:w-full max-w-md lg:max-w-3xl xl:max-w-4xl mx-auto px-2 lg:px-6 mt-5 mb-10"
     >
-      <!-- Card Peta -->
       <div
         class="bg-white rounded-lg shadow-[6px_6px_12px_rgba(0,0,0,0.15)] lg:rounded-2xl xl:rounded-3xl lg:shadow-[10px_10px_20px_rgba(0,0,0,0.2)] transition-all duration-300"
       >
         <h2
-          class="font-semibold font-poppins text-[#232323] text-xl lg:text-3xl xl:text-4xl text-center mt-3 lg:mt-5"
+          class="font-semibold font-poppins text-[#232323] text-xl lg:text-3xl xl:text-4xl text-center mt-3 lg:mt-5 mb-"
         >
           Lokasi Tong Sampah
         </h2>
 
-        <div class="w-full mt-2 lg:mt-4 rounded-lg overflow-hidden">
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3957.3797391031767!2d112.72539331860114!3d-7.3111666319815924!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd7fbd1cb925a1d%3A0x1dbecb0b2e9b059f!2sUniversitas%20Telkom%20Surabaya!5e0!3m2!1sid!2sid!4v1761204850076!5m2!1sid!2sid"
-            class="w-full h-64 lg:h-[22rem] xl:h-[26rem] shadow-lg rounded-b-lg transition-all duration-300"
-            allowfullscreen=""
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-          ></iframe>
-        </div>
+        <!-- Peta Dinamis -->
+        <div
+          id="mapAll"
+          class="w-full h-64 lg:h-[22rem] xl:h-[26rem] rounded-b-lg shadow-lg z-0"
+        ></div>
+
+        <!-- Info jarak -->
+        <p
+          id="distanceInfo"
+          class="text-center text-gray-700 font-medium mt-3 mb-4 text-sm lg:text-lg"
+        >
+          Menghitung jarak antar tong sampah...
+        </p>
       </div>
-   
-   <script src="js/calendar.js"></script>
+    </div>
 
+    <script>
+      // === AMBIL DATA DARI API ===
+      async function getTrashData() {
+        try {
+          const res = await fetch("https://nyampah-in.my.id/api/read.php");
+          return await res.json();
+        } catch (e) {
+          console.error("Gagal mengambil data:", e);
+          return [];
+        }
+      }
 
+      // === FILTER & TAMPILKAN ===
+      async function applyFilter() {
+        const box = document.getElementById("boxHasil");
+        const tanggal = document.getElementById("filterTanggal").value;
+        const kodeTong = document.getElementById("filterTong").value;
+
+        let data = await getTrashData();
+
+        if (!data || data.length === 0) {
+          box.innerHTML = `<p class="text-gray-600">Tidak ada data.</p>`;
+          return;
+        }
+
+        // urutkan dari terbaru ke lama
+        data.sort((a, b) => new Date(b.waktu) - new Date(a.waktu));
+
+        // FILTER TANGGAL
+        if (tanggal !== "") {
+          data = data.filter((item) => item.waktu.startsWith(tanggal));
+        }
+
+        // FILTER DEVICE
+        if (kodeTong !== "") {
+          data = data.filter((item) => item.device === kodeTong);
+        }
+
+        // Jika setelah filter tidak ada data
+        if (data.length === 0) {
+          box.innerHTML = `
+      <div>
+        <p class="font-semibold text-gray-800">Data tidak ditemukan.</p>
+        <p>Silakan ubah filter.</p>
+      </div>`;
+          return;
+        }
+
+        // Ambil hanya 2 data terbaru
+        const duaData = data.slice(0, 2);
+
+        // TAMPILKAN
+        box.innerHTML = `
+    <div class="w-full text-left">
+      <p class="font-semibold text-gray-800 mb-3">2 Data Terbaru</p>
+
+      <div class="space-y-3">
+        ${duaData
+          .map(
+            (d) => `
+          <div class="border rounded-lg p-3 bg-gray-50 shadow-sm">
+            <p><b>Kode Tong:</b> ${d.device}</p>
+            <p><b>Volume:</b> ${d.volume}%</p>
+            <p><b>Lokasi:</b> ${d.latitude}, ${d.longitude}</p>
+            <p><b>Waktu:</b> ${d.waktu}</p>
+          </div>
+        `
+          )
+          .join("")}
+      </div>
+    </div>
+  `;
+      }
+
+      // === EVENT LISTENER TOMBOL ===
+      document
+        .getElementById("btnFilter")
+        .addEventListener("click", applyFilter);
+
+      // === AUTO UPDATE SETIAP 30 DETIK ===
+      applyFilter();
+      setInterval(applyFilter, 30000);
+    </script>
   </body>
 </html>

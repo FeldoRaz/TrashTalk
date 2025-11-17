@@ -1,0 +1,15 @@
+/* Trash overlay smooth transition */
+.trash-overlay {
+  transition: height 450ms ease; /* fallback smooth transition */
+  will-change: height; /* optimize for animation */
+  background-color: #87db6b; /* default, bisa di-override inline */
+  opacity: 0.6;
+  border-bottom-left-radius: 0.5rem; /* agar sinkron dengan rounded-b-lg */
+  border-bottom-right-radius: 0.5rem;
+  z-index: 0; /* pastikan berada di belakang gambar (gambar z-10) */
+}
+
+/* small helper for status dot transitions */
+.trash-indicator {
+  transition: background-color 300ms ease;
+}
