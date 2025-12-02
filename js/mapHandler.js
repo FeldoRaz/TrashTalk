@@ -7,7 +7,6 @@
       const response = await fetch("https://nyampah-in.my.id/api/read.php");
       const data = await response.json();
 
-      // Ambil data terakhir masing-masing lokasi
       latestData.Kayangan = data.find((d) => d.device === "Kayangan") || null;
       latestData.Nirmala = data.find((d) => d.device === "Nirmala") || null;
     } catch (err) {

@@ -54,7 +54,6 @@ async function applyFilter() {
   // gunakan 2 data terbaru
   const duaData = data.slice(0, 2);
 
-  // HAPUS gaya center default agar tampilan kiri
   box.classList.remove("flex", "items-center", "justify-center", "text-center");
 
   // TAMPILKAN
@@ -82,9 +81,7 @@ async function applyFilter() {
   `;
 }
 
-// === EVENT LISTENER TOMBOL ===
 document.getElementById("btnFilter").addEventListener("click", applyFilter);
 
-// === AUTO UPDATE SETIAP 30 DETIK ===
 applyFilter();
 setInterval(applyFilter, 30000);
