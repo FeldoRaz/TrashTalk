@@ -1,44 +1,74 @@
 // === FETCH DATA ===
 async function getTrashData() {
   try {
-    const response = await fetch("https://nyampah-in.my.id/api/read.php");
-    return await response.json();
-  } catch (err) {
-    console.error("Gagal mengambil data:", err);
+    const res = await fetch("https://nyampah-in.my.id/api/read.php");
+    return await res.json();
+  } catch (e) {
+    console.error("Gagal mengambil data:", e);
     return [];
   }
 }
 
-// === TAMPILKAN 3 DATA TERAKHIR ===
-async function tampilkanTigaTerakhir() {
+// === FILTER & TAMPILKAN ===
+async function applyFilter() {
   const box = document.getElementById("boxHasil");
+  const tanggal = document.getElementById("filterTanggal").value;
+  const kodeTong = document.getElementById("filterTong").value;
+
   let data = await getTrashData();
 
+  // jika tidak ada data
   if (!data || data.length === 0) {
+    box.classList.add("flex", "items-center", "justify-center", "text-center");
     box.innerHTML = `
       <div>
         <p class="font-semibold text-gray-800">Tidak ada data.</p>
-      </div>
-    `;
+      </div>`;
     return;
   }
 
-  // Sort dari terbaru → terlama
+  // Sort terbaru → lama
   data.sort((a, b) => new Date(b.waktu) - new Date(a.waktu));
 
-  // Ambil hanya 3 data paling baru
-  const tigaData = data.slice(0, 3);
+  // FILTER TANGGAL
+  if (tanggal !== "") {
+    data = data.filter((item) => item.waktu.startsWith(tanggal));
+  }
 
-  // Render ke tampilan
+  // FILTER DEVICE
+  if (kodeTong !== "") {
+    data = data.filter((item) => item.device === kodeTong);
+  }
+
+  // hasil filter kosong
+  if (data.length === 0) {
+    box.classList.add("flex", "items-center", "justify-center", "text-center");
+    box.innerHTML = `
+      <div>
+        <p class="font-semibold text-gray-800">Data tidak ditemukan.</p>
+        <p>Silakan ubah filter.</p>
+      </div>`;
+    return;
+  }
+
+  // gunakan 2 data terbaru
+  const duaData = data.slice(0, 2);
+
+  // HAPUS gaya center default agar tampilan kiri
+  box.classList.remove("flex", "items-center", "justify-center", "text-center");
+
+  // TAMPILKAN
   box.innerHTML = `
-    <div class="w-full">
-      <p class="font-semibold text-gray-800 mb-3">3 Data Terbaru</p>
+    <div class="w-full text-left">
+      <p class="text-center text-lg font-semibold text-gray-800 mb-3">
+        2 Data Terbaru
+      </p>
 
       <div class="space-y-3">
-        ${tigaData
+        ${duaData
           .map(
             (d) => `
-          <div class="border rounded-lg p-3 text-left bg-gray-50">
+          <div class="border rounded-lg p-3 bg-gray-50 shadow-sm">
             <p><b>Kode Tong:</b> ${d.device}</p>
             <p><b>Volume:</b> ${d.volume}%</p>
             <p><b>Lokasi:</b> ${d.latitude}, ${d.longitude}</p>
@@ -52,6 +82,9 @@ async function tampilkanTigaTerakhir() {
   `;
 }
 
+// === EVENT LISTENER TOMBOL ===
+document.getElementById("btnFilter").addEventListener("click", applyFilter);
+
 // === AUTO UPDATE SETIAP 30 DETIK ===
-tampilkanTigaTerakhir();
-setInterval(tampilkanTigaTerakhir, 30000);
+applyFilter();
+setInterval(applyFilter, 30000);

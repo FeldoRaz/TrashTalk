@@ -2,7 +2,6 @@
   let map, markerKayangan, markerNirmala, lineBetween;
   let latestData = { Kayangan: null, Nirmala: null };
 
-  // === Fungsi untuk hitung jarak antar dua titik (meter) ===
   function haversine(lat1, lon1, lat2, lon2) {
     const R = 6371000; // jari-jari bumi (m)
     const toRad = (deg) => (deg * Math.PI) / 180;
@@ -14,7 +13,6 @@
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   }
 
-  // === Ambil data dari API ===
   async function fetchLocationData() {
     try {
       const res = await fetch("https://nyampah-in.my.id/api/read.php");
@@ -32,7 +30,6 @@
     }
   }
 
-  // === Perbarui tampilan peta ===
   function updateMap() {
     if (!latestData.Kayangan || !latestData.Nirmala) return;
 
@@ -41,7 +38,6 @@
     const latN = parseFloat(latestData.Nirmala.latitude);
     const lonN = parseFloat(latestData.Nirmala.longitude);
 
-    // Perbarui marker Kayangan
     if (!markerKayangan) {
       markerKayangan = L.marker([latK, lonK])
         .addTo(map)
@@ -50,7 +46,6 @@
       markerKayangan.setLatLng([latK, lonK]);
     }
 
-    // Perbarui marker Nirmala
     if (!markerNirmala) {
       markerNirmala = L.marker([latN, lonN])
         .addTo(map)
@@ -59,7 +54,6 @@
       markerNirmala.setLatLng([latN, lonN]);
     }
 
-    // Perbarui garis penghubung
     if (lineBetween) map.removeLayer(lineBetween);
     lineBetween = L.polyline(
       [
@@ -69,11 +63,10 @@
       { color: "green", weight: 3 }
     ).addTo(map);
 
-    // Atur tampilan agar kedua titik terlihat
     const group = L.featureGroup([markerKayangan, markerNirmala]);
     map.fitBounds(group.getBounds(), { padding: [40, 40] });
 
-    // Hitung jarak
+  
     const jarak = haversine(latK, lonK, latN, lonN);
     const infoBox = document.getElementById("distanceInfo");
     if (infoBox) {
@@ -83,10 +76,9 @@
     }
   }
 
-  // === Inisialisasi Peta ===
   document.addEventListener("DOMContentLoaded", () => {
     const mapEl = document.getElementById("mapAll");
-    if (!mapEl) return; // hindari error kalau halaman tanpa mapAll
+    if (!mapEl) return;
 
     map = L.map("mapAll").setView([-7.3086, 112.7283], 17);
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
