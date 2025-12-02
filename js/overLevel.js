@@ -3,18 +3,16 @@ async function updateTrashLevels() {
     const response = await fetch("https://nyampah-in.my.id/api/read.php");
     const data = await response.json();
 
-    // Loop semua elemen overlay (Kayangan & Nirmala)
     document.querySelectorAll(".trash-overlay").forEach((overlay) => {
-      const deviceName = overlay.dataset.device; // ambil "Kayangan" atau "Nirmala"
+      const deviceName = overlay.dataset.device;
       const record = data.find((d) => d.device === deviceName);
 
       if (record) {
-        // pastikan volume ada dan ubah ke persentase
+       
         const volume = parseFloat(record.volume) || 0;
         const heightPercent = Math.min(100, Math.max(0, volume));
 
-        // Koreksi tinggi visual agar proporsional dengan gambar
-        const correctionFactor = 0.7; // area isi 80% dari tinggi gambar
+        const correctionFactor = 0.7;
         const bottomOffset = 5;
         const adjustedHeight = heightPercent * correctionFactor + bottomOffset;
 
@@ -49,7 +47,6 @@ async function updateTrashLevels() {
   }
 }
 
-// Jalankan pertama kali dan ulangi setiap 30 detik
 updateTrashLevels();
 setInterval(updateTrashLevels, 30000);
 

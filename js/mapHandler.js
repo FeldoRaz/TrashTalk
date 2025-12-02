@@ -1,7 +1,7 @@
 (() => {
   let latestData = { Kayangan: null, Nirmala: null };
 
-  // === Ambil Data dari API ===
+  // === Ambil API ===
   async function fetchLatestData() {
     try {
       const response = await fetch("https://nyampah-in.my.id/api/read.php");
@@ -15,13 +15,12 @@
     }
   }
 
-  // === Buka Lokasi di Google Maps ===
+
   function openInGoogleMaps(latitude, longitude) {
     const url = `https://www.google.com/maps?q=${latitude},${longitude}`;
     window.open(url, "_blank");
   }
 
-  // === Event Listener Tombol ===
   document.addEventListener("DOMContentLoaded", () => {
     // Tombol Kayangan
     document.getElementById("trackBtn")?.addEventListener("click", () => {
@@ -45,10 +44,8 @@
         }
       });
 
-    // Ambil data awal
     fetchLatestData();
 
-    // Update lokasi tiap 60 detik
     setInterval(fetchLatestData, 60000);
   });
 })();

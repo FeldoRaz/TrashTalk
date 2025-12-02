@@ -38,4 +38,4 @@ setInterval(() => {
       }
     })
     .catch((err) => console.error(err));
-}, 2000); // cek setiap 2 detik
+}, 2000); 

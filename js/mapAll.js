@@ -3,7 +3,7 @@
   let latestData = { Kayangan: null, Nirmala: null };
 
   function haversine(lat1, lon1, lat2, lon2) {
-    const R = 6371000; // jari-jari bumi (m)
+    const R = 6371000; 
     const toRad = (deg) => (deg * Math.PI) / 180;
     const dLat = toRad(lat2 - lat1);
     const dLon = toRad(lon2 - lon1);
@@ -86,6 +86,6 @@
     }).addTo(map);
 
     fetchLocationData();
-    setInterval(fetchLocationData, 60000); // update tiap 1 menit
+    setInterval(fetchLocationData, 60000);
   });
 })();

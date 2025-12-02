@@ -21,7 +21,6 @@ async function updateLatestTime() {
       const waktuEl = document.getElementById("updateTime");
       if (waktuEl) waktuEl.textContent = formatted;
 
-      // Efek kecil saat update
       const container = document.getElementById("updateTimeContainer");
       if (container) {
         container.classList.add("ring-2", "ring-emerald-400");
@@ -36,6 +35,6 @@ async function updateLatestTime() {
   }
 }
 
-// Jalankan pertama kali dan update tiap 30 detik
+
 updateLatestTime();
 setInterval(updateLatestTime, 30000);
